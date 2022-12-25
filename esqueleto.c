@@ -189,3 +189,24 @@ int Comprobarsiesprimo(long int numero) {
 	
 	return 1;
 }
+
+//contar lineas de un fichero
+int ContarLineas(){
+    int contador=0;
+    char c;
+    FILE *contar = fopen(NOMBRE_FICH, "r");
+
+    if(contar==NULL){
+        printf("Error al contar lineas de primos.txt\n");
+    }else{
+        while((c==fgets(contar)) != EOF){    //mientras sea distinto del End Of File
+            if(c=='\n'){    //si es \n significa que acaba una linea
+                contador++;
+            }
+        }
+    }
+
+    fclose(contar);
+    return contador;
+
+}
