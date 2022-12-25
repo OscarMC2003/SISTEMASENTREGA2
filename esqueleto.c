@@ -174,3 +174,18 @@ static void alarmHandler(int signo)
     alarm(INTERVALO_TIMER);
 
 }
+
+// Encontrar primos
+int Comprobarsiesprimo(long int numero) {
+	if (numero < 2){
+		return 0; // 0 y 1 no son primos
+	}else{
+		for (int i = 2; i <= (numero / 2) ; i++){
+			if (numero % i == 0){
+				return 0;
+			} 
+		}
+	}
+	
+	return 1;
+}
