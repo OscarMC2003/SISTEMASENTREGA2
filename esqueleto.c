@@ -126,14 +126,37 @@ int main(int argc, char* argv[])
         // AQUI VA LA LOGICA DE NEGOCIO DE CADA CALCulador. 
 		if (mypid != pidservidor)
 		{
-
 			message.mesg_type = COD_ESTOY_AQUI;
 			sprintf(message.mesg_text,"%d",mypid);
 			msgsnd( msgid, &message, sizeof(message), IPC_NOWAIT);
-		
-			// Un montón de código por escribir
-			sleep(60); // Esto es solo para que el esqueleto no muera de inmediato, quitar en el definitivo
-
+			
+			//A la espera de recibir el mensaje de límites de operación
+			msgrcv(msgid, &message, sizeof(message), COD_LIMITES, 0);
+			sscanf(message.mesg_text, "%ld %d", &nbase, &nrango);
+			
+			//buscar num primos en un rango
+			for(numero=nbase; numero<nbase+nrango; numero++){
+				if((Comprobarsiesprimo(numero))==1){
+					
+					//crear función para escribir en primos.txt
+					escribirPrimos(numero);
+					
+					//envio num primo
+					message.mesg_type = COD_RESULTADOS;
+					sprintf(message.mesg_text, "%d %ld", mypid, numero);
+					msgsnd(msgid, &message, sizeof(message), IPC_NOWAIT);
+					
+					//LLAMAR A LA FUNCION INFORMAR AQUÍ
+					Informar(message.mesg_text, verbosity);
+					
+				}
+			}
+			
+			//aviso fin de procesamiento
+			message.mesg_type = COD_FIN;
+			sprintf(message.mesg_text, "%d", mypid);
+			msgsnd(msgid, &message, sizeof(message), IPC_NOWAIT);			
+			
 			exit(0);
 		}
 		
