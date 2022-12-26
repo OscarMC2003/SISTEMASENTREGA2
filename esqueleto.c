@@ -199,14 +199,12 @@ int main(int argc, char* argv[])
     
     else
     {
-	  
-      alarm(INTERVALO_TIMER);
-      signal(SIGALRM, alarmHandler);
-      for (;;)    // Solo para el esqueleto
-		sleep(1); // Solo para el esqueleto
-	  // Espera del final de SERVER
-      // ...
-      // El final de todo
+	cuentasegs=0;
+	alarm(INTERVALO_TIMER);
+	signal(SIGALRM, alarmHandler);
+		wait(NULL);	// Espera del final de SERVER
+	printf("RESULTADO: %d primos detectados \n", ContarLineas());
+	// El final de todo
     }
 	
 	//Tiempo total del proceso
