@@ -231,3 +231,16 @@ void Imprimirjerarquiaproc(int pidraiz,int pidservidor, int *pidhijos, int numhi
 	}
 	printf("\n");
 }
+
+//informa cuando se encuentra un primo
+void Informar(char *texto, int verboso){
+	//se llama a la función en la linea 140
+	
+	//se tiene que imprimir el pid del proceso hijo que encontró un numero primo y el numero
+	
+	if(verboso==1){
+		printf("El hijo %s, encontró que el segundo número es primo\n", texto);
+	}else{
+		;	//si es 0 no informa
+	}
+}
