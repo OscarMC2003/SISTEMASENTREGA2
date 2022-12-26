@@ -46,6 +46,7 @@ void Informar(char *texto, int verboso);
 void Imprimirjerarquiaproc(int pidraiz,int pidservidor, int *pidhijos, int numhijos);
 int ContarLineas();
 static void alarmHandler(int signo);
+void escribirPrimos(int num);
 
 int cuentasegs;                   // Variable para el cómputo del tiempo total
 
@@ -242,5 +243,16 @@ void Informar(char *texto, int verboso){
 		printf("El hijo %s, encontró que el segundo número es primo\n", texto);
 	}else{
 		;	//si es 0 no informa
+	}
+}
+
+void escribirPrimos(int num){
+	//printf("Funciono escribir, %d\n", num);
+	FILE *escribir = fopen(NOMBRE_FICH, "a");	//a añade datos al final del fichero
+	
+	if(escribir==NULL){
+		perror("Error: fallo al crear primos.txt");
+	}else{
+		fprintf(escribir, "%d\n", num);
 	}
 }
