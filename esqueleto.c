@@ -55,10 +55,11 @@ int main(int argc, char* argv[])
 	int i,j;
 	long int numero;
 	long int numprimrec;
-    long int nbase;
-    int nrango;
+    long int nbase=BASE;
+    int nrango=RANGO;
     int nfin;
-    time_t tstart,tend; 
+    time_t tstart,tend;
+	double cpu_time_used;
 	
 	key_t key;
     int msgid;    
@@ -73,8 +74,18 @@ int main(int argc, char* argv[])
 
     // Control de entrada, después del nombre del script debe figurar el número de hijos y el parámetro verbosity
 
-    numhijos = 2;     // SOLO para el esqueleto, en el proceso  definitivo vendrá por la entrada
-
+    //correccion de errores del control de entrada
+	if(argc<3){
+		printf("Error, debes introducir 2 números\n");
+	}else{
+		numhijos = atoi(argv[1]);  //recibe un char por argv y lo convierte a int
+		verbosity = atoi(argv[2]);
+		if((verbosity!=0)&&(verbosity!=1)){	//si es distinto de 0 y 1 da error
+			printf("El valor de verbosity introducido no es válido\nSe inicializará a 0 por defecto\n");
+			verbosity=0;
+		}
+	}
+	
     pid=fork();       // Creación del SERVER
     
     if (pid == 0)     // Rama del hijo de RAIZ (SERVER)
@@ -165,6 +176,12 @@ int main(int argc, char* argv[])
       // ...
       // El final de todo
     }
+	
+	//Tiempo total del proceso
+	end = clock();
+  	cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+  	printf("Tiempo %.0f (segundos)",cpu_time_used);
+	
 }
 
 // Manejador de la alarma en el RAIZ
