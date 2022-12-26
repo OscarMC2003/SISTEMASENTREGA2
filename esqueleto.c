@@ -162,28 +162,37 @@ int main(int argc, char* argv[])
 		
 		// SERVER
 		
-		else
-		{ 
-		  // Pide memoria dinámica para crear la lista de pids de los hijos CALCuladores
+		else{ 
+			// Pide memoria dinámica para crear la lista de pids de los hijos CALCuladores
+			pidhijos=(int*) malloc(numhijos*sizeof(int));
 		  
+			//Recepción de los mensajes COD_ESTOY_AQUI de los hijos
+			for (j=0; j <numhijos; j++){
+				msgrcv(msgid, &message, sizeof(message), 0, 0);
+				sscanf(message.mesg_text,"%d",&pidhijos[j]); // Tendrás que guardar esa pid
+				printf("\nMe ha enviado un mensaje el hijo %d\n",pidhijos[j]);
+			}
 		  
-		  //Recepción de los mensajes COD_ESTOY_AQUI de los hijos
-		  for (j=0; j <numhijos; j++)
-		  {
-			  msgrcv(msgid, &message, sizeof(message), 0, 0);
-			  sscanf(message.mesg_text,"%d",&pid); // Tendrás que guardar esa pid
-			  printf("\nMe ha enviado un mensaje el hijo %d\n",pid);
-		  }
+			//sleep(60); // Esto es solo para que el esqueleto no muera de inmediato, quitar en el definitivo
 		  
-			sleep(60); // Esto es solo para que el esqueleto no muera de inmediato, quitar en el definitivo
-
+			// Mucho código con la lógica de negocio de SERVER
+			Imprimirjerarquiaproc(pidraiz, pidservidor, pidhijos, numhijos);
+			
+			//rango de busqueda
+			inicuenta=BASE;
+			intervalo=(int)(RANGO/numhijos);
+			
+			for(int i=0; i<numhijos; i++){
+				message.mesg_type=COD_LIMITES;
+				sprintf(message.mesg_text, "%d %d", inicuenta, intervalo);
+				msgsnd(msgid, &message, sizeof(message), IPC_NOWAIT);
+				inicuenta=inicuenta+intervalo;
+			}
+			
+			// Borrar la cola de mensajería, muy importante. No olvides cerrar los ficheros
+			msgctl(msgid,IPC_RMID,NULL);
 		  
-		  // Mucho código con la lógica de negocio de SERVER
-		  
-		  // Borrar la cola de mensajería, muy importante. No olvides cerrar los ficheros
-		  msgctl(msgid,IPC_RMID,NULL);
-		  
-	   }
+		}
     }
 
     // Rama de RAIZ, proceso primigenio
@@ -295,4 +304,6 @@ void escribirPrimos(int num){
 	}else{
 		fprintf(escribir, "%d\n", num);
 	}
+	
+	fclose(escribir);
 }
