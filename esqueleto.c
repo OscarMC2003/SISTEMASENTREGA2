@@ -199,7 +199,7 @@ int ContarLineas(){
     if(contar==NULL){
         printf("Error al contar lineas de primos.txt\n");
     }else{
-        while((c==fgets(contar)) != EOF){    //mientras sea distinto del End Of File
+        while((c==fgetc(contar)) != EOF){    //mientras sea distinto del End Of File
             if(c=='\n'){    //si es \n significa que acaba una linea
                 contador++;
             }
@@ -209,4 +209,14 @@ int ContarLineas(){
     fclose(contar);
     return contador;
 
+}
+
+//imprimir PIDs
+void Imprimirjerarquiaproc(int pidraiz,int pidservidor, int *pidhijos, int numhijos){
+	printf("\nRAIZ \tSERV \tCALC\n");
+	printf("%d \t%d \t", pidraiz, pidservidor);
+	for(int i=0; i<numhijos; i++){
+		printf("%d\n\t \t", pidhijos[i]);	//imprime el pid de todos los hijos
+	}
+	printf("\n");
 }
