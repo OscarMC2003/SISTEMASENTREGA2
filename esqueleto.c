@@ -170,7 +170,18 @@ int main(int argc, char* argv[])
 static void alarmHandler(int signo)
 {
 //...
-    printf("SOLO PARA EL ESQUELETO... Han pasado 5 segundos\n");
+   FILE *fc;
+	int numPrimo;
+	cuentasegs = cuentasegs + INTERVALO_TIMER;
+	
+	if((fc=fopen(NOMBRE_FICH_CUENTA, "r")) != NULL){
+		fscanf(fc, "%d", &numPrimo);
+		fclose(fc);
+		printf("%02d (segs): %d primos encontrados \n", cuentasegs, numPrimo);
+	}else{
+		printf("%02d (segs) \n", cuentasegs);
+	}
+    //printf("SOLO PARA EL ESQUELETO... Han pasado 5 segundos\n");
     alarm(INTERVALO_TIMER);
 
 }
